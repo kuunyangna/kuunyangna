@@ -1,0 +1,39 @@
+pipeline{
+    agent any
+	tools{
+	maven  "mvn"
+	jdk    "oracleJDK"
+	}
+
+	stages{
+	  stage('checkout'){
+	     steps{
+	        git 'https://github.com/kuunyangna/kuunyangna.git'
+	    }
+	  }
+	
+
+	  stage('build'){
+	     steps{
+	       dir('NEWFOLDER'){
+	         script{
+	           sh 'docker build -t myapp .'
+	     }
+	   }
+	  }
+	}
+
+	 
+
+	  stage('deploying to dockerhub'){
+	     steps{
+	        sh 'docker login -u kuunyangna -p aquila@30'
+	        sh 'docker tag myapp:latest kuunyangna/new '
+	        sh 'docker push kuunyangna/new'
+	    
+	  
+	}
+
+  }
+ }
+}
